@@ -15,14 +15,22 @@ router.get('/note/list', function (req, res) {
 
 router.post('/note/seek', (req, res) => {
     let title = req.body.title;
-    // console.log(req.body);
-    let reg = new RegExp(`${title}`)
+    console.log(title);
+    let reg = new RegExp(title)
     notes.find({title: reg}).then(data => {
-        res.json({
-            code: 200,
-            msg: "获取成功",
-            data
-        })
+        console.log(data);
+        if (data.length !== 0) {
+            res.json({
+                code: 200,
+                msg: "获取成功",
+                data
+            })
+        } else{
+            res.json({
+                code: 400,
+                msg: "获取内容为空",
+            })
+        }
     })
 })
 
@@ -37,7 +45,6 @@ router.post('/note/detail', function (req, res) {
         });
         reply.find({noteId: _id}).then(rda => {
             // console.log(rda);
-
             res.json({
                 code: 200,
                 rda,

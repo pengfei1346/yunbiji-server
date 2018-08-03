@@ -10,15 +10,15 @@ router.post('/note/reply', (req, res) => {
     // console.log(username);
     // console.log(userId);
     reply.create({noteId, username, userId, replyContent}).then(cal => {
-        let _id=noteId;
-        notes.findOne({_id}).then(data => {
-            let reply=data.reply + 1;
-            console.log(reply);
-            notes.update({noteId}, {$set: {reply}}).then(data => {
-                res.json({
-                    code: 200,
-                    mgs: "回复成功"
-                })
+        let _id = noteId;
+
+        notes.findOneAndUpdate(
+            {_id},
+            {$inc: {reply: 1}}).then(data => {
+            res.json({
+                code: 200,
+                mgs: "回复成功",
+                data
             })
         })
     }).catch(err => {
@@ -27,7 +27,6 @@ router.post('/note/reply', (req, res) => {
             mgs: "回复失败"
         })
     })
-
 });
 
 module.exports = router;
